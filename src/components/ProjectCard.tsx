@@ -58,7 +58,7 @@ function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
 
   return (
     <div
-      className={`card cursor-pointer ${isExpanded ? 'ring-1 ring-[#2DD4BF]/30' : ''}`}
+      className={`card cursor-pointer ${isExpanded ? 'ring-1 ring-[#00A7FB]/30' : ''}`}
       onClick={onClick}
     >
       <div className="p-5">
@@ -69,7 +69,7 @@ function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
             style={{ backgroundColor: project.color }}
           />
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-[#F8FAFC] text-base leading-tight mb-1 truncate">
+            <h3 className="font-semibold text-[#2A3C6C] text-base leading-tight mb-1 truncate">
               {project.name}
             </h3>
             <span className={`badge ${getStatusBadgeClass(project.status)}`}>
@@ -82,8 +82,8 @@ function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
         {totalTasks > 0 && (
           <div className="mb-4">
             <div className="flex justify-between text-xs mb-2">
-              <span className="text-[#64748B]">{totalTasks} subtasks</span>
-              <span className="text-[#2DD4BF]">{executingCount} executing</span>
+              <span className="text-[#8896AB]">{totalTasks} subtasks</span>
+              <span className="text-[#00A7FB]">{executingCount} executing</span>
             </div>
             <div className="progress-bar">
               <div
@@ -96,13 +96,13 @@ function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
 
         {/* Notes */}
         {project.notes && (
-          <p className="text-sm text-[#64748B] line-clamp-2">{project.notes}</p>
+          <p className="text-sm text-[#8896AB] line-clamp-2">{project.notes}</p>
         )}
 
         {/* Expand toggle */}
         {totalTasks > 0 && (
-          <div className="flex items-center justify-center mt-4 pt-3 border-t border-[rgba(148,163,184,0.1)]">
-            <span className="text-xs text-[#64748B] flex items-center gap-1">
+          <div className="flex items-center justify-center mt-4 pt-3 border-t border-[rgba(42,60,108,0.1)]">
+            <span className="text-xs text-[#8896AB] flex items-center gap-1">
               {isExpanded ? 'Hide' : 'Show'} subtasks
               <svg
                 width="12"
@@ -122,22 +122,22 @@ function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
 
       {/* Expanded content */}
       {isExpanded && totalTasks > 0 && (
-        <div className="px-5 pb-5 pt-2 bg-[#13161D]/50">
-          <h4 className="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-3">
+        <div className="px-5 pb-5 pt-2 bg-[#F5F2EE]/50">
+          <h4 className="text-xs font-semibold text-[#8896AB] uppercase tracking-wider mb-3">
             Subtasks
           </h4>
           <div className="space-y-3">
             {statusGroups.map(([status, tasks]) => (
               <div key={status}>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium text-[#94A3B8]">
+                  <span className="text-sm font-medium text-[#5A6A8A]">
                     {getShortStatus(status)}
                   </span>
-                  <span className="text-xs text-[#64748B]">({tasks.length})</span>
+                  <span className="text-xs text-[#8896AB]">({tasks.length})</span>
                 </div>
                 <ul className="ml-4 space-y-1">
                   {tasks.map((task) => (
-                    <li key={task.id} className="text-sm text-[#64748B] flex items-start gap-2">
+                    <li key={task.id} className="text-sm text-[#5A6A8A] flex items-start gap-2">
                       <span
                         className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
                         style={{ backgroundColor: project.color }}

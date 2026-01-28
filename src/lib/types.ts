@@ -42,23 +42,23 @@ export const STATUS_POSITIONS: Record<string, number> = {
   'done': 100,
 };
 
-// Distinct colors for projects on the hill chart
+// Distinct colors for projects on the hill chart (Metopio brand-aligned)
 const PROJECT_COLORS_PALETTE = [
-  '#E879A0', // Pink
+  '#00A7FB', // Metopio Blue
+  '#962EA0', // Metopio Purple
+  '#FF7D1A', // Metopio Orange
+  '#2A3C6C', // Metopio Navy
+  '#FCC300', // Metopio Gold
   '#3B82F6', // Blue
-  '#4ADE80', // Green
-  '#F59E0B', // Amber
+  '#10B981', // Emerald
+  '#F472B6', // Pink
   '#8B5CF6', // Purple
-  '#EC4899', // Magenta
   '#14B8A6', // Teal
-  '#F97316', // Orange
+  '#F59E0B', // Amber
   '#6366F1', // Indigo
   '#EF4444', // Red
-  '#84CC16', // Lime
   '#06B6D4', // Cyan
-  '#A855F7', // Violet
-  '#10B981', // Emerald
-  '#F43F5E', // Rose
+  '#84CC16', // Lime
 ];
 
 export function getStatusPosition(status: string): number {

@@ -77,12 +77,12 @@ function HillChart({ projects, onProjectClick, selectedProjectId }: HillChartPro
         y1={padding.top + chartHeight}
         x2={width - padding.right}
         y2={padding.top + chartHeight}
-        stroke="#334155"
+        stroke="#CBD5E1"
         strokeWidth="2"
       />
 
       {/* Hill curve */}
-      <path d={hillPath} stroke="#2DD4BF" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d={hillPath} stroke="#00A7FB" strokeWidth="3" fill="none" strokeLinecap="round" />
 
       {/* Peak line */}
       <line
@@ -90,18 +90,18 @@ function HillChart({ projects, onProjectClick, selectedProjectId }: HillChartPro
         y1={padding.top}
         x2={peakX}
         y2={padding.top + chartHeight}
-        stroke="#FCD34D"
+        stroke="#FCC300"
         strokeWidth="1"
         strokeDasharray="4,4"
-        opacity="0.5"
+        opacity="0.6"
       />
 
       {/* Labels */}
-      <text x={padding.left} y={height - 20} fill="#64748B" fontSize="11">START</text>
-      <text x={padding.left + chartWidth * 0.25} y={height - 20} fill="#C084FC" fontSize="11" textAnchor="middle">EXPLORING</text>
-      <text x={peakX} y={height - 20} fill="#FCD34D" fontSize="11" textAnchor="middle">PEAK</text>
-      <text x={padding.left + chartWidth * 0.75} y={height - 20} fill="#2DD4BF" fontSize="11" textAnchor="middle">EXECUTING</text>
-      <text x={width - padding.right} y={height - 20} fill="#64748B" fontSize="11" textAnchor="end">DONE</text>
+      <text x={padding.left} y={height - 20} fill="#8896AB" fontSize="11">START</text>
+      <text x={padding.left + chartWidth * 0.25} y={height - 20} fill="#962EA0" fontSize="11" textAnchor="middle">EXPLORING</text>
+      <text x={peakX} y={height - 20} fill="#B38A00" fontSize="11" textAnchor="middle">PEAK</text>
+      <text x={padding.left + chartWidth * 0.75} y={height - 20} fill="#00A7FB" fontSize="11" textAnchor="middle">EXECUTING</text>
+      <text x={width - padding.right} y={height - 20} fill="#8896AB" fontSize="11" textAnchor="end">DONE</text>
 
       {/* Project dots */}
       {projectPositions.map(({ project, x, y }) => {
@@ -114,8 +114,8 @@ function HillChart({ projects, onProjectClick, selectedProjectId }: HillChartPro
             <circle cx={x} cy={y} r={isSelected ? 14 : 12} fill={project.color} />
             {project.tasks.length > 0 && (
               <>
-                <circle cx={x + 10} cy={y - 10} r={9} fill="#1F232E" stroke={project.color} strokeWidth="2" />
-                <text x={x + 10} y={y - 6} textAnchor="middle" fill="#F8FAFC" fontSize="9" fontWeight="700">
+                <circle cx={x + 10} cy={y - 10} r={9} fill="#FFFFFF" stroke={project.color} strokeWidth="2" />
+                <text x={x + 10} y={y - 6} textAnchor="middle" fill="#2A3C6C" fontSize="9" fontWeight="700">
                   {project.tasks.length}
                 </text>
               </>
