@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import HillChart from '@/components/HillChart';
 import ProjectCard from '@/components/ProjectCard';
 import { useProjects } from '@/hooks/useProjects';
@@ -31,12 +30,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[var(--bg-primary)]/80 border-b border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
-            <motion.div
-              className="flex items-center gap-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
+            <div className="flex items-center gap-4">
               {/* Logo mark */}
               <div className="relative w-10 h-10">
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[var(--accent-teal)] to-[var(--accent-amber)] opacity-20 blur-md" />
@@ -55,14 +49,9 @@ export default function Home() {
                   Shape Up Progress Tracker
                 </p>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="flex items-center gap-4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
+            <div className="flex items-center gap-4">
               {isMockData && (
                 <span className="badge badge-peak">
                   Demo Mode
@@ -92,45 +81,27 @@ export default function Home() {
                   />
                 </svg>
               </button>
-            </motion.div>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-10">
-        <AnimatePresence mode="wait">
-          {isError && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mb-8 p-4 rounded-xl bg-[var(--accent-rose)]/10 border border-[var(--accent-rose)]/30 text-[var(--accent-rose)]"
-            >
-              Failed to load data. Please check your ClickUp configuration.
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isError && (
+          <div className="mb-8 p-4 rounded-xl bg-[var(--accent-rose)]/10 border border-[var(--accent-rose)]/30 text-[var(--accent-rose)]">
+            Failed to load data. Please check your ClickUp configuration.
+          </div>
+        )}
 
         {isLoading && projects.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center py-32"
-          >
-            <div className="relative">
-              <div className="w-16 h-16 rounded-full border-4 border-[var(--border-subtle)] border-t-[var(--accent-teal)] animate-spin" />
-            </div>
+          <div className="flex flex-col items-center justify-center py-32">
+            <div className="w-16 h-16 rounded-full border-4 border-[var(--border-subtle)] border-t-[var(--accent-teal)] animate-spin" />
             <p className="mt-6 text-[var(--text-muted)]">Loading projects...</p>
-          </motion.div>
+          </div>
         ) : (
           <>
             {/* Hill Chart */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="hill-container p-8 mb-10"
-            >
+            <div className="hill-container p-8 mb-10">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-lg font-semibold text-[var(--text-primary)]">
@@ -156,61 +127,32 @@ export default function Home() {
                 onProjectClick={handleProjectClick}
                 selectedProjectId={selectedProject?.id}
               />
-            </motion.div>
+            </div>
 
             {/* Section header */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center justify-between mb-6"
-            >
+            <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-[var(--text-primary)]">
                 Project Details
               </h2>
               <div className="h-px flex-1 mx-6 bg-gradient-to-r from-[var(--border-subtle)] via-[var(--accent-teal)]/20 to-[var(--border-subtle)]" />
-            </motion.div>
+            </div>
 
             {/* Project Cards Grid */}
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: {
-                    staggerChildren: 0.08,
-                  },
-                },
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {projects.map((project, index) => (
-                <motion.div
+                <ProjectCard
                   key={project.id}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <ProjectCard
-                    project={project}
-                    isExpanded={expandedCardId === project.id}
-                    onClick={() => handleCardClick(project.id)}
-                    index={index}
-                  />
-                </motion.div>
+                  project={project}
+                  isExpanded={expandedCardId === project.id}
+                  onClick={() => handleCardClick(project.id)}
+                  index={index}
+                />
               ))}
-            </motion.div>
+            </div>
 
             {/* Empty state */}
             {projects.length === 0 && !isLoading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-32"
-              >
+              <div className="text-center py-32">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[var(--bg-card)] flex items-center justify-center">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--text-muted)]">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 20L12 6L21 20" />
@@ -220,7 +162,7 @@ export default function Home() {
                 <p className="text-[var(--text-muted)] text-sm mt-2">
                   Add tasks with a Shape Up Hill Status to see them here
                 </p>
-              </motion.div>
+              </div>
             )}
           </>
         )}
