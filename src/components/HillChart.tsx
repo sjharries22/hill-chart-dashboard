@@ -137,9 +137,23 @@ function HillChart({
         Making it happen
       </text>
 
-      {/* Project dots */}
-      {projects.map((project) => {
-        const progress = getStatusPosition(project.status);
+      {/* Project dots - spread out overlapping ones */}
+      {projects.map((project, index) => {
+        const baseProgress = getStatusPosition(project.status);
+
+        // Count how many projects share this position and find this project's index among them
+        const samePositionProjects = projects.filter(
+          (p) => getStatusPosition(p.status) === baseProgress
+        );
+        const positionIndex = samePositionProjects.findIndex((p) => p.id === project.id);
+        const totalAtPosition = samePositionProjects.length;
+
+        // Spread projects horizontally if multiple share the same status
+        const spreadOffset = totalAtPosition > 1
+          ? (positionIndex - (totalAtPosition - 1) / 2) * 4
+          : 0;
+        const progress = baseProgress + spreadOffset;
+
         const x = padding.left + (progress / 100) * chartWidth;
         const y = padding.top + chartHeight - getHillY(progress) * chartHeight * 0.85;
         const isSelected = selectedProjectId === project.id;
