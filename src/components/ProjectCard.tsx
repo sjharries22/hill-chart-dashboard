@@ -10,20 +10,6 @@ interface ProjectCardProps {
   index: number;
 }
 
-const HILL_STATUS_ORDER = [
-  'Exploring (Lots of Unknowns)',
-  'Climbing (Making progress on approach)',
-  'Peak (Decisions finalized)',
-  'Executing (Building Known Work)',
-  'Finishing (Polishing and Edge cases)',
-  'No Status',
-];
-
-function getStatusOrder(status: string): number {
-  const idx = HILL_STATUS_ORDER.findIndex(s => s.toLowerCase() === status.toLowerCase());
-  return idx >= 0 ? idx : HILL_STATUS_ORDER.length;
-}
-
 function getStatusBadgeClass(status: string): string {
   const n = status.toLowerCase();
   if (n.includes('exploring')) return 'badge-exploring';
@@ -46,10 +32,6 @@ function getShortStatus(status: string): string {
 }
 
 function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
-  const statusGroups = Object.entries(project.tasksByStatus).sort(
-    ([a], [b]) => getStatusOrder(a) - getStatusOrder(b)
-  );
-
   const totalTasks = project.tasks.length;
   const executingCount =
     (project.tasksByStatus['Executing (Building Known Work)']?.length || 0) +
@@ -126,29 +108,17 @@ function ProjectCard({ project, isExpanded, onClick }: ProjectCardProps) {
           <h4 className="text-xs font-semibold text-[#8896AB] uppercase tracking-wider mb-3">
             Subtasks
           </h4>
-          <div className="space-y-3">
-            {statusGroups.map(([status, tasks]) => (
-              <div key={status}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium text-[#5A6A8A]">
-                    {getShortStatus(status)}
-                  </span>
-                  <span className="text-xs text-[#8896AB]">({tasks.length})</span>
-                </div>
-                <ul className="ml-4 space-y-1">
-                  {tasks.map((task) => (
-                    <li key={task.id} className="text-sm text-[#5A6A8A] flex items-start gap-2">
-                      <span
-                        className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
-                        style={{ backgroundColor: project.color }}
-                      />
-                      {task.name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <ul className="space-y-1.5">
+            {project.tasks.map((task) => (
+              <li key={task.id} className="text-sm text-[#5A6A8A] flex items-start gap-2">
+                <span
+                  className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                  style={{ backgroundColor: project.color }}
+                />
+                {task.name}
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
     </div>
