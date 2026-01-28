@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import HillChart from '@/components/HillChart';
 import ProjectCard from '@/components/ProjectCard';
 import { useProjects } from '@/hooks/useProjects';
@@ -8,77 +8,53 @@ import { Project } from '@/lib/types';
 
 export default function Home() {
   const { projects, lastUpdated, isMockData, isLoading, isError, refresh } = useProjects();
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
-  const handleProjectClick = (project: Project) => {
-    setSelectedProject(project);
+  const handleProjectClick = useCallback((project: Project) => {
+    setSelectedProjectId(project.id);
     setExpandedCardId(project.id);
-  };
+  }, []);
 
-  const handleCardClick = (projectId: string) => {
-    setExpandedCardId(expandedCardId === projectId ? null : projectId);
-    const project = projects.find((p) => p.id === projectId);
-    if (project) {
-      setSelectedProject(project);
-    }
-  };
+  const handleCardClick = useCallback((projectId: string) => {
+    setExpandedCardId(prev => prev === projectId ? null : projectId);
+    setSelectedProjectId(projectId);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-mesh bg-pattern">
+    <div className="min-h-screen bg-[#0D0F14]">
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[var(--bg-primary)]/80 border-b border-[var(--border-subtle)]">
+      <header className="sticky top-0 z-50 bg-[#0D0F14] border-b border-[rgba(148,163,184,0.1)]">
         <div className="max-w-7xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              {/* Logo mark */}
-              <div className="relative w-10 h-10">
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[var(--accent-teal)] to-[var(--accent-amber)] opacity-20 blur-md" />
-                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-teal)] to-[var(--accent-amber)] flex items-center justify-center">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--bg-primary)]">
-                    <path d="M3 20L12 6L21 20" />
-                    <path d="M12 6V20" strokeDasharray="4 2" />
-                  </svg>
-                </div>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2DD4BF] to-[#FCD34D] flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D0F14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 20L12 6L21 20" />
+                </svg>
               </div>
               <div>
-                <h1 className="title-display text-2xl title-gradient">
-                  Cycle Hill View
-                </h1>
-                <p className="text-sm text-[var(--text-muted)] mt-0.5">
-                  Shape Up Progress Tracker
-                </p>
+                <h1 className="title-display text-2xl title-gradient">Cycle Hill View</h1>
+                <p className="text-sm text-[#64748B]">Shape Up Progress Tracker</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              {isMockData && (
-                <span className="badge badge-peak">
-                  Demo Mode
-                </span>
-              )}
+              {isMockData && <span className="badge badge-peak">Demo</span>}
               {lastUpdated && (
-                <span className="text-sm text-[var(--text-muted)]">
+                <span className="text-sm text-[#64748B]">
                   Updated {formatTimeAgo(lastUpdated)}
                 </span>
               )}
-              <button
-                onClick={() => refresh()}
-                className="btn-ghost"
-                title="Refresh data"
-              >
+              <button onClick={() => refresh()} className="btn-ghost" title="Refresh">
                 <svg
                   className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  strokeWidth={2}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
             </div>
@@ -88,15 +64,15 @@ export default function Home() {
 
       <main className="max-w-7xl mx-auto px-6 py-10">
         {isError && (
-          <div className="mb-8 p-4 rounded-xl bg-[var(--accent-rose)]/10 border border-[var(--accent-rose)]/30 text-[var(--accent-rose)]">
+          <div className="mb-8 p-4 rounded-xl bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.3)] text-[#FB7185]">
             Failed to load data. Please check your ClickUp configuration.
           </div>
         )}
 
         {isLoading && projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32">
-            <div className="w-16 h-16 rounded-full border-4 border-[var(--border-subtle)] border-t-[var(--accent-teal)] animate-spin" />
-            <p className="mt-6 text-[var(--text-muted)]">Loading projects...</p>
+            <div className="w-12 h-12 rounded-full border-4 border-[#1F232E] border-t-[#2DD4BF] animate-spin" />
+            <p className="mt-6 text-[#64748B]">Loading...</p>
           </div>
         ) : (
           <>
@@ -104,40 +80,23 @@ export default function Home() {
             <div className="hill-container p-8 mb-10">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-                    Project Progress
-                  </h2>
-                  <p className="text-sm text-[var(--text-muted)] mt-1">
-                    {projects.length} active project{projects.length !== 1 ? 's' : ''} in this cycle
+                  <h2 className="text-lg font-semibold text-[#F8FAFC]">Project Progress</h2>
+                  <p className="text-sm text-[#64748B] mt-1">
+                    {projects.length} project{projects.length !== 1 ? 's' : ''} in cycle
                   </p>
-                </div>
-                <div className="flex items-center gap-6 text-xs text-[var(--text-muted)]">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-[var(--accent-teal)]/50 to-[var(--accent-teal)]" />
-                    <span>Unknowns</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-[var(--accent-teal)] to-[var(--accent-amber)]" />
-                    <span>Knowns</span>
-                  </div>
                 </div>
               </div>
               <HillChart
                 projects={projects}
                 onProjectClick={handleProjectClick}
-                selectedProjectId={selectedProject?.id}
+                selectedProjectId={selectedProjectId}
               />
             </div>
 
             {/* Section header */}
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-                Project Details
-              </h2>
-              <div className="h-px flex-1 mx-6 bg-gradient-to-r from-[var(--border-subtle)] via-[var(--accent-teal)]/20 to-[var(--border-subtle)]" />
-            </div>
+            <h2 className="text-xl font-semibold text-[#F8FAFC] mb-6">Project Details</h2>
 
-            {/* Project Cards Grid */}
+            {/* Project Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {projects.map((project, index) => (
                 <ProjectCard
@@ -150,18 +109,9 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Empty state */}
             {projects.length === 0 && !isLoading && (
               <div className="text-center py-32">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[var(--bg-card)] flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--text-muted)]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 20L12 6L21 20" />
-                  </svg>
-                </div>
-                <p className="text-[var(--text-secondary)] text-lg">No projects found</p>
-                <p className="text-[var(--text-muted)] text-sm mt-2">
-                  Add tasks with a Shape Up Hill Status to see them here
-                </p>
+                <p className="text-[#94A3B8]">No projects found</p>
               </div>
             )}
           </>
@@ -169,25 +119,17 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[var(--border-subtle)] mt-auto">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-[var(--text-muted)]">
-              Powered by{' '}
-              <a
-                href="https://basecamp.com/shapeup"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--accent-teal)] hover:underline underline-offset-4"
-              >
-                Shape Up
-              </a>{' '}
-              methodology
-            </p>
-            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-              <div className="w-2 h-2 rounded-full bg-[var(--accent-teal)] animate-pulse" />
-              <span>Live data from ClickUp</span>
-            </div>
+      <footer className="border-t border-[rgba(148,163,184,0.1)] py-6">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <p className="text-sm text-[#64748B]">
+            Powered by{' '}
+            <a href="https://basecamp.com/shapeup" target="_blank" rel="noopener noreferrer" className="text-[#2DD4BF] hover:underline">
+              Shape Up
+            </a>
+          </p>
+          <div className="flex items-center gap-2 text-xs text-[#64748B]">
+            <div className="w-2 h-2 rounded-full bg-[#2DD4BF]" />
+            <span>ClickUp</span>
           </div>
         </div>
       </footer>
@@ -196,12 +138,9 @@ export default function Home() {
 }
 
 function formatTimeAgo(date: Date): string {
-  const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
   if (seconds < 60) return 'just now';
-  if (seconds < 120) return '1 min ago';
-  if (seconds < 3600) return `${Math.floor(seconds / 60)} mins ago`;
-  if (seconds < 7200) return '1 hour ago';
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
   return date.toLocaleDateString();
 }
